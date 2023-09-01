@@ -1,0 +1,11 @@
+@import url("https://fonts.googleapis.com/css2?family=Oswald&display=swap");
+
+::selection {
+  background-color: #090d16;
+  color: #fbfcfe;
+}
+
+* {
+  font-family: "Oswald", sans-serif;
+  color: #090d16;
+}
