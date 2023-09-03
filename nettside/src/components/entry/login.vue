@@ -6,10 +6,6 @@ import { useIsLoggedInStore } from "../../stores/isLoggedIn";
 
 const isLoggedIn = useIsLoggedInStore();
 
-defineProps({
-  logIn: Function,
-});
-
 const userData = ref({
   mail: "",
   password: "",

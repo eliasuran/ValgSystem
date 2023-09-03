@@ -1,30 +1,10 @@
 <script setup>
-import { onMounted } from "vue";
+import { ref } from "vue";
 import axios from "axios";
 import { useIsLoggedInStore } from "../stores/isLoggedIn";
 
 const isLoggedIn = useIsLoggedInStore();
-
-const fetchUserData = async () => {
-  try {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      return;
-    }
-    const response = await axios.get("http://localhost:3000/users", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    const userHasVoted = response.data.hasVoted;
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-onMounted(() => {
-  fetchUserData();
-});
+const hasVoted = ref(false);
 
 defineProps({
   showVotingPage: Function,
@@ -41,7 +21,7 @@ defineProps({
     <div>
       <div v-if="isLoggedIn.isLoggedIn">
         <button @click="showStatsPage">Satistikk</button>
-        <button v-if="userHasVoted" @click="showVotingPage">Stem</button>
+        <button v-if="!hasVoted" @click="showVotingPage">Stem</button>
         <button @click="logOut">Logg Ut</button>
       </div>
       <div v-if="!isLoggedIn.isLoggedIn">

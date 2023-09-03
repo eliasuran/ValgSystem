@@ -9,7 +9,6 @@ import { ref, onMounted } from "vue";
 import { useIsLoggedInStore } from "./stores/isLoggedIn.js";
 
 const isLoggedIn = useIsLoggedInStore();
-
 const showVoting = ref(false);
 const showRegister = ref(false);
 const showLogin = ref(false);

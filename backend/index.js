@@ -53,6 +53,22 @@ app.get("/users", authenticateToken, (req, res) => {
   });
 });
 
+app.get("/users/hasVoted", (req, res) => {
+  const mail = req.body.mail;
+  db.query(
+    "SELECT hasVoted FROM users WHERE mail = ?",
+    [mail],
+    (err, results) => {
+      if (err) {
+        res.status(500).json({ error: "Database error" });
+      } else {
+        const hasVoted = results.hasVoted;
+        res.status(200).json({ hasVoted });
+      }
+    }
+  );
+});
+
 app.post("/register", (req, res) => {
   const mail = req.body.mail;
   const password = req.body.password;

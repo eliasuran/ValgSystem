@@ -8,10 +8,12 @@ export default {
   data() {
     return {
       candidates: [],
+      hasVoted: false,
     };
   },
   mounted() {
     this.fetchCandidates();
+    this.fetchUserData();
   },
   methods: {
     async fetchCandidates() {
@@ -31,6 +33,24 @@ export default {
         candidate.votes++;
       } catch (error) {
         console.error("Error voting:", error);
+      }
+    },
+    async fetchUserData() {
+      try {
+        const response = await axios.get(
+          "http://localhost:3000/users/hasVoted",
+          {
+            mail: localStorage.getItem("user"),
+          }
+        );
+        if (response.status === 200) {
+          this.hasVoted = response.data;
+          console.log(this.hasVoted);
+        } else {
+          console.log("Error fetching user data");
+        }
+      } catch (error) {
+        console.log(error);
       }
     },
   },
