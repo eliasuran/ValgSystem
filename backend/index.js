@@ -54,15 +54,15 @@ app.get("/users", authenticateToken, (req, res) => {
 });
 
 app.get("/users/hasVoted", (req, res) => {
-  const mail = req.body.mail;
+  const mail = req.query.mail;
   db.query(
-    "SELECT hasVoted FROM users WHERE mail = ?",
+    "SELECT IF(EXISTS(SELECT hasVoted FROM users WHERE mail = ? AND hasVoted = 1), 1, 0) AS hasVoted",
     [mail],
     (err, results) => {
       if (err) {
         res.status(500).json({ error: "Database error" });
       } else {
-        const hasVoted = results.hasVoted;
+        const hasVoted = results[0].hasVoted;
         res.status(200).json({ hasVoted });
       }
     }

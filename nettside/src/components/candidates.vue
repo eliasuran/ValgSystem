@@ -25,27 +25,35 @@ export default {
       }
     },
     async vote(candidate) {
-      try {
-        await axios.post("http://localhost:3000/vote", {
-          candidate: candidate.name,
-          user: this.user,
-        });
-        candidate.votes++;
-      } catch (error) {
-        console.error("Error voting:", error);
+      this.fetchUserData();
+      if (!this.hasVoted) {
+        try {
+          await axios.post("http://localhost:3000/vote", {
+            candidate: candidate.name,
+            user: this.user,
+          });
+          candidate.votes++;
+        } catch (error) {
+          console.error("Error voting:", error);
+        }
+      } else {
+        console.log("Du har allerede stemt!");
       }
     },
     async fetchUserData() {
       try {
+        const userMail = localStorage.getItem("user");
         const response = await axios.get(
-          "http://localhost:3000/users/hasVoted",
-          {
-            mail: localStorage.getItem("user"),
-          }
+          `http://localhost:3000/users/hasVoted?mail=${userMail}`
         );
         if (response.status === 200) {
-          this.hasVoted = response.data;
-          console.log(this.hasVoted);
+          this.hasVoted = response.data.hasVoted;
+          console.log(
+            "User:",
+            localStorage.getItem("user"),
+            "Status:",
+            this.hasVoted
+          );
         } else {
           console.log("Error fetching user data");
         }
